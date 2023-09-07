@@ -17,5 +17,4 @@ public class Role extends Auditable {
 
     @Column(name = "NAME")
     private String name;
-
 }

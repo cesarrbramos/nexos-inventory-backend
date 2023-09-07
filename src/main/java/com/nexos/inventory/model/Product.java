@@ -1,6 +1,8 @@
 package com.nexos.inventory.model;
 
 import javax.persistence.*;
+
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@QueryEntity
 @Entity
 @Table(name="PRODUCTS")
 public class Product extends Auditable {
