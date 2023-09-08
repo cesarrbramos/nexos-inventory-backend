@@ -9,9 +9,12 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product>, QuerydslBinderCustomizer<QProduct> {
 
+    boolean existsByNameEqualsIgnoreCaseAndIdNotIn(String name, List<Long> idsToExclude);
     boolean existsByNameEqualsIgnoreCase(String name);
 
     @Override

@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import java.util.*;
 
 @RestController()
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -49,11 +49,13 @@ public class ProductController {
 
     @PutMapping("/{id}")
     private ResponseEntity<ProductDTO> update(@RequestBody ProductDTO dto, @PathVariable Long id, @RequestParam Long userId) {
-        productService.findOne(id);
+        Product old = productService.findOne(id);
         User user = userService.findOne(userId);
-        validateProductName(dto.getName());
+        validateProductNameWithExclusion(dto.getName(), id);
         Product product = ProductDTO.TO_ENTITY.apply(dto);
+        product.setId(id);
         product.setUpdateUser(user);
+        product.setCreateUser(old.getCreateUser());
         productService.save(product);
         return ResponseEntity.ok(
                 ProductDTO.TO_DTO.apply(product)
@@ -74,9 +76,15 @@ public class ProductController {
         );
     }
 
-    private void validateProductName(String name) throws CustomException {
+    private void validateProductNameWithExclusion(String name, Long idToExclude) throws CustomException {
+        if (productService.existsByNameEqualsIgnoreCaseAndIdNotIn(name, Collections.singletonList(idToExclude)))
+            throw new CustomException(HttpStatus.BAD_REQUEST, Errors.PRODUCT_NAME_ALREADY_REGISTERED);
+    }
+
+    private void validateProductName(String name) {
         if (productService.existsByNameEqualsIgnoreCase(name))
             throw new CustomException(HttpStatus.BAD_REQUEST, Errors.PRODUCT_NAME_ALREADY_REGISTERED);
     }
+
 
 }

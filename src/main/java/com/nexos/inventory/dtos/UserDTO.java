@@ -52,5 +52,9 @@ public class UserDTO extends AuditableDTO implements Serializable {
         return dto;
     };
 
+    public String getFullname() {
+        return firstname + " " + lastname;
+    }
+
     private static final long serialVersionUID = -4115464816543715494L;
 }

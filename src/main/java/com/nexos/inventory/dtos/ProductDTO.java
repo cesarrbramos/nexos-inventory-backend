@@ -42,10 +42,15 @@ public class ProductDTO extends AuditableDTO implements Serializable {
         dto.setName(entity.getName());
         dto.setQuantity(entity.getQuantity());
         dto.setEntryDate(entity.getEntryDate());
-        dto.setCreateUser(UserDTO.TO_DTO.apply(entity.getCreateUser()));
-        dto.setUpdateUser(UserDTO.TO_DTO.apply(entity.getUpdateUser()));
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
+
+        if (entity.getCreateUser() != null)
+            dto.setCreateUser(UserDTO.TO_DTO.apply(entity.getCreateUser()));
+
+        if (entity.getUpdateUser() != null)
+            dto.setUpdateUser(UserDTO.TO_DTO.apply(entity.getUpdateUser()));
+
         return dto;
     };
 
